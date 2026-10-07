@@ -1,0 +1,28 @@
+.app {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+header h1 {
+  color: blue;
+}
+
+.student-profile {
+  border: 2px solid black;
+  padding: 15px;
+  margin: 10px auto 25px;
+  width: 350px;
+  text-align: left;
+  border-radius: 8px;
+}
+
+.student-profile h3 {
+  text-align: center;
+}
+
+footer {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #f0f0f0;
+}
