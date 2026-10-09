@@ -1,232 +1,199 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+const PRODUCT_PRICE = 499;
+
 function Header() {
   return (
-    <header className="header">
-      <div className="logo">🎓</div>
-      <div>
-        <h1>Student Management System</h1>
-        <p>Student Practice Dashboard</p>
+    <header className="store-header">
+      <div className="store-logo">a<span>mazon</span></div>
+      <div className="store-heading">
+        <h1>Amazon Product Store</h1>
+        <p>Everything you need, delivered to you.</p>
       </div>
     </header>
   );
 }
 
-function StudentProfile({
-  name,
-  department,
-  year,
-  practiceCount
+function ProductCard({
+  productName,
+  price,
+  quantity,
+  selectedColor,
+  deliveryCity,
 }) {
   useEffect(() => {
     const previousTitle = document.title;
 
-    document.title = `Practice Sessions: ${practiceCount}`;
+    document.title =
+      `${productName} | ${selectedColor} | Cart: ${quantity}`;
 
     return () => {
       document.title = previousTitle;
     };
-  }, [practiceCount]);
+  }, [productName, selectedColor, quantity]);
 
-  const getStatus = () => {
-    if (practiceCount === 0) return "Ready to Start";
-    if (practiceCount < 3) return "Getting Started";
-    if (practiceCount < 5) return "Consistent Learner";
-    return "Practice Champion";
-  };
-
-  const getMessage = () => {
-    if (practiceCount === 0) {
-      return "Start your first practice session!";
-    }
-
-    if (practiceCount < 3) {
-      return "Great start! Keep practising.";
-    }
-
-    if (practiceCount < 5) {
-      return "Excellent consistency! Keep going.";
-    }
-
-    return "🏆 Amazing! You are a Practice Champion!";
-  };
-
-  const progress = Math.min(practiceCount * 20, 100);
+  const total = quantity * price;
 
   return (
-    <section className="profile-card">
-
-      <div className="profile-top">
-        <div className="avatar">A</div>
-
-        <div>
-          <h2>{name}</h2>
-          <span className="active-status">
-            ● Profile Active
-          </span>
+    <section className="product-card">
+      <div className={`product-visual ${selectedColor.toLowerCase()}`}>
+        <div className="mouse">
+          <div className="mouse-wheel" />
+          <div className="mouse-line" />
         </div>
+        <span className="visual-label">{selectedColor} Edition</span>
       </div>
 
-      <div className="student-info">
+      <div className="product-details">
+        <span className="product-badge">FEATURED PRODUCT</span>
+        <h2>{productName}</h2>
+        <p className="product-subtitle">Wireless Optical Mouse</p>
 
-        <div className="info-box">
-          <span className="label">DEPARTMENT</span>
-          <strong>{department}</strong>
+        <div className="rating">
+          <span>★★★★★</span>
+          <small> Sample product</small>
         </div>
 
-        <div className="info-box">
-          <span className="label">YEAR</span>
-          <strong>{year}</strong>
+        <div className="price">₹{price}</div>
+        <p className="tax-note">Inclusive of all taxes</p>
+
+        <div className="detail-row">
+          <span>Colour</span>
+          <strong>{selectedColor}</strong>
         </div>
 
-      </div>
+        <div className="detail-row">
+          <span>Deliver to</span>
+          <strong>📍 {deliveryCity || "Enter your city"}</strong>
+        </div>
 
-      <div className="practice-section">
-
-        <div className="practice-header">
+        <div className="cart-summary">
           <div>
-            <span className="label">PRACTICE PROGRESS</span>
-            <h3>{practiceCount} Sessions</h3>
+            <span className="summary-label">CART QUANTITY</span>
+            <strong className="quantity-number">{quantity}</strong>
           </div>
-
-          <div className="session-number">
-            {practiceCount}
+          <div className="total-block">
+            <span className="summary-label">TOTAL AMOUNT</span>
+            <strong>₹{total.toLocaleString("en-IN")}</strong>
           </div>
         </div>
 
-        <div className="progress-container">
-          <div
-            className="progress-bar"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-
-        <div className="progress-text">
-          <span>{progress}% completed</span>
-          <span>Goal: 5 sessions</span>
-        </div>
-
-      </div>
-
-      <div className="achievement">
-        <div className="achievement-icon">🏆</div>
-
-        <div>
-          <strong>{getStatus()}</strong>
-          <p>{getMessage()}</p>
+        <div className={`cart-status ${quantity > 0 ? "added" : ""}`}>
+          <span className="status-dot" />
+          {quantity === 0 ? "Cart is empty" : "Product added to cart"}
         </div>
       </div>
-
     </section>
   );
 }
 
 function Footer() {
   return (
-    <footer>
-      <p>© 2026 Student Management System</p>
-      <span>Built with React • Learning by Practice</span>
+    <footer className="store-footer">
+      <p>© 2026 Amazon Product Store</p>
+      <span>Simple shopping. Smart learning. Built with React.</span>
     </footer>
   );
 }
 
 function App() {
+  const productName = "Wireless Mouse";
+  const price = PRODUCT_PRICE;
 
-  const student = {
-    name: "Anu",
-    department: "CSE",
-    year: "3rd Year"
-  };
-
-  const [practiceCount, setPracticeCount] = useState(0);
-  const [showProfile, setShowProfile] = useState(true);
-
-  const completePractice = () => {
-    setPracticeCount((count) => count + 1);
-  };
-
-  const resetPractice = () => {
-    setPracticeCount(0);
-  };
-
-  const toggleProfile = () => {
-    setShowProfile((visible) => !visible);
-  };
+  const [quantity, setQuantity] = useState(0);
+  const [selectedColor, setSelectedColor] = useState("Black");
+  const [deliveryCity, setDeliveryCity] = useState("Coimbatore");
+  const [showProduct, setShowProduct] = useState(true);
 
   return (
     <div className="app">
-
       <Header />
 
-      <main>
+      <main className="store-main">
+        <section className="welcome-section">
+          <span className="eyebrow">DAY 3 • REACT PRACTICE</span>
+          <h2>Your shopping cart, made simple.</h2>
+          <p>Choose a colour, set your delivery city, and manage your cart.</p>
+        </section>
 
-        <div className="welcome">
-          <span>WELCOME BACK 👋</span>
-          <h2>Track Your Learning Journey</h2>
-          <p>
-            Complete practice sessions and build your skills
-            consistently.
-          </p>
-        </div>
-
-        {showProfile && (
-          <StudentProfile
-            name={student.name}
-            department={student.department}
-            year={student.year}
-            practiceCount={practiceCount}
+        {showProduct && (
+          <ProductCard
+            productName={productName}
+            price={price}
+            quantity={quantity}
+            selectedColor={selectedColor}
+            deliveryCity={deliveryCity}
           />
         )}
 
-        <div className="controls">
+        <section className="shopping-controls">
+          <h3>Personalise your order</h3>
 
-          <button
-            className="complete-btn"
-            onClick={completePractice}
-          >
-            ✓ Complete Practice
-          </button>
+          <div className="input-grid">
+            <label>
+              Choose colour
+              <select
+                value={selectedColor}
+                onChange={(event) => setSelectedColor(event.target.value)}
+              >
+                <option value="Black">Black</option>
+                <option value="Blue">Blue</option>
+                <option value="White">White</option>
+              </select>
+            </label>
 
-          <button
-            className="reset-btn"
-            onClick={resetPractice}
-          >
-            ↻ Reset
-          </button>
-
-          <button
-            className="toggle-btn"
-            onClick={toggleProfile}
-          >
-            {showProfile
-              ? "👁 Hide Profile"
-              : "👁 Show Profile"}
-          </button>
-
-        </div>
-
-        <div className="concept-card">
-
-          <div>
-            <span className="concept-icon">⚛️</span>
+            <label>
+              Delivery city
+              <input
+                type="text"
+                value={deliveryCity}
+                onChange={(event) => setDeliveryCity(event.target.value)}
+                placeholder="Enter delivery city"
+              />
+            </label>
           </div>
 
-          <div>
-            <strong>React Concepts Demonstrated</strong>
+          <div className="button-grid">
+            <button
+              className="add-button"
+              onClick={() => setQuantity((current) => current + 1)}
+            >
+              + Add to Cart
+            </button>
 
-            <p>
-              Components • JSX • Props • State • useState •
-              useEffect • Mounting • Updating • Unmounting
-            </p>
+            <button
+              className="remove-button"
+              onClick={() => setQuantity((current) => Math.max(0, current - 1))}
+              disabled={quantity === 0}
+            >
+              − Remove One
+            </button>
+
+            <button
+              className="reset-button"
+              onClick={() => setQuantity(0)}
+            >
+              ↻ Reset Cart
+            </button>
+
+            <button
+              className="toggle-button"
+              onClick={() => setShowProduct((visible) => !visible)}
+            >
+              {showProduct ? "Hide Product" : "Show Product"}
+            </button>
           </div>
 
-        </div>
+          <p className="hint">
+            Your colour, delivery city, and quantity are preserved when the
+            product card is hidden.
+          </p>
+        </section>
 
       </main>
 
       <Footer />
-
     </div>
   );
 }
