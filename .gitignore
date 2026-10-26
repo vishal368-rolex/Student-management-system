@@ -1,1 +1,7 @@
 node_modules/
+node_modules copy/
+server/node_modules/
+.env
+.env.local
+server/.env
+dist/
